@@ -1,5 +1,6 @@
 import JapiCmp.configureJapiCmp
 import org.jetbrains.intellij.collectJars
+import org.jetbrains.intellij.collectZips
 import org.jetbrains.intellij.isKotlinRuntime
 import org.jetbrains.intellij.tasks.InstrumentCodeTask
 import kotlin.io.path.isDirectory
@@ -184,6 +185,16 @@ allprojects {
                         println(it.name)
                         println(it.path)
                     }
+                }
+            }
+
+            if (x.isDirectory) {
+                val a =  collectZips(x.toPath().resolve("lib/src")).map { it.toFile() }
+                println("results of that 2")
+
+                a.forEach {
+                    println(it.name)
+                    println(it.path)
                 }
             }
 
