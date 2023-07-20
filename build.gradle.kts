@@ -1,4 +1,6 @@
 import JapiCmp.configureJapiCmp
+import org.gradle.kotlin.dsl.support.serviceOf
+import org.jetbrains.dokka.utilities.ServiceLocator.toFile
 import org.jetbrains.intellij.collectJars
 import org.jetbrains.intellij.collectZips
 import org.jetbrains.intellij.isKotlinRuntime
@@ -168,8 +170,11 @@ tasks.register("rmbuild") {
         }.count()
     }
 }
+val fingerprinting = serviceOf<org.gradle.internal.fingerprint.classpath.ClasspathFingerprinter>()
+
 allprojects {
     tasks.withType<InstrumentCodeTask>().configureEach {
+        val taskx = this
         doLast {
             val x = this@configureEach.ideaDependency.get().classes
 
@@ -211,7 +216,29 @@ allprojects {
 
         }
         doFirst {
+            println("alo")
+            var classLoader = taskx.javaClass.classLoader
+            println("alo")
 
+            while (classLoader is java.net.URLClassLoader){
+                val fingerPrinting = mutableSetOf<Pair<String,String>>()
+                val allFiles = mutableSetOf<String>()
+                classLoader.urLs.forEach {
+                    println(it.toFile().path + "-- "+ "${fingerprinting.fingerprint(files(it.toFile())).hash}")
+                    rootProject.buildScan.value("${this@configureEach.name} -${it.toFile().path}", "${fingerprinting.fingerprint(files(it.toFile())).hash}")
+
+                }
+                classLoader = classLoader.parent
+
+//
+//
+//
+//                    fingerPrinting.add(
+//                        Pair("${taskx.path}:${it.toFile().name}", "${fingerprinting.fingerprint(files(it.toFile())).hash}"])
+//                    allFiles.add(File(it.file))
+//                }
+//                classLoader = classLoader.parent
+            }
 
             rootProject.buildScan.value("${this@configureEach.name} -lazy First getFqn", this@configureEach.ideaDependency.get().getFqn())
             rootProject.buildScan.value("${this@configureEach.name} -lazy First buildNumber}", this@configureEach.ideaDependency.get().buildNumber)
