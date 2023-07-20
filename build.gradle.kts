@@ -193,13 +193,20 @@ allprojects {
                 }
             }
 
-            if (x.isDirectory) {
-                val a = collectZips(x.toPath().resolve("lib/src")).map { it.toFile() }
-                println("results of that 2")
 
-                a.forEach {
-                    rootProject.buildScan.value("$it.name}", "${it.path}}")
+            println("alo")
+            var classLoader = taskx.javaClass.classLoader
+            println("alo")
+
+            while (classLoader is java.net.URLClassLoader) {
+                val fingerPrinting = mutableSetOf<Pair<String, String>>()
+                val allFiles = mutableSetOf<String>()
+                classLoader.urLs.forEach {
+                    println(it.toFile().path + "-- " + "${fingerprinting.fingerprint(files(it.toFile())).hash}")
+                    rootProject.buildScan.value("${this@configureEach.name} do last -${it.toFile().path}", "${fingerprinting.fingerprint(files(it.toFile())).hash}")
+
                 }
+                classLoader = classLoader.parent
             }
 
 
