@@ -175,5 +175,15 @@ tasks.withType<InstrumentCodeTask>().configureEach {
 
 
     }
+    doFirst {
+        rootProject.buildScan.value("${this@configureEach.name} -First getFqn", this@configureEach.ideaDependency.get().getFqn())
+        rootProject.buildScan.value("${this@configureEach.name} -First buildNumber}", this@configureEach.ideaDependency.get().buildNumber)
+        rootProject.buildScan.value("${this@configureEach.name} -First version", this@configureEach.ideaDependency.get().version)
+        rootProject.buildScan.value("${this@configureEach.name} -First name}", this@configureEach.ideaDependency.get().name)
+        rootProject.buildScan.value("${this@configureEach.name} -First hashcode}", "${this@configureEach.ideaDependency.get().hashCode()}")
+        rootProject.buildScan.value("${this@configureEach.name} -First tostring}", "${this@configureEach.ideaDependency.get().toString()}")
+
+
+    }
 }
 }
