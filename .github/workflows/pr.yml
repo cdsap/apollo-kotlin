@@ -11,10 +11,7 @@ on:
 env:
   GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
 
-# Cancel any current or previous job from the same PR
-concurrency:
-  group: ${{ github.head_ref }}
-  cancel-in-progress: true
+
 
 jobs:
   tests-gradle:
