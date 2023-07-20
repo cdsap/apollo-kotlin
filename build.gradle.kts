@@ -171,7 +171,8 @@ tasks.register("rmbuild") {
 allprojects {
     tasks.withType<InstrumentCodeTask>().configureEach {
         doLast {
-          val x = this@configureEach.ideaDependency.get().classes
+            val x = this@configureEach.ideaDependency.get().classes
+
             if (x.isDirectory) {
                 val lib = x.toPath().resolve("lib")
                 if (lib.isDirectory()) {
@@ -182,19 +183,17 @@ allprojects {
                     val a = (baseFiles + antFiles).map { it.toFile() }
                     println("results of that")
                     a.forEach {
-                        println(it.name)
-                        println(it.path)
+                        rootProject.buildScan.value("$it.name}", "${it.path}}")
                     }
                 }
             }
 
             if (x.isDirectory) {
-                val a =  collectZips(x.toPath().resolve("lib/src")).map { it.toFile() }
+                val a = collectZips(x.toPath().resolve("lib/src")).map { it.toFile() }
                 println("results of that 2")
 
                 a.forEach {
-                    println(it.name)
-                    println(it.path)
+                    rootProject.buildScan.value("$it.name}", "${it.path}}")
                 }
             }
 
