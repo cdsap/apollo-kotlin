@@ -1,5 +1,9 @@
 import JapiCmp.configureJapiCmp
+import org.jetbrains.intellij.collectJars
+import org.jetbrains.intellij.isKotlinRuntime
 import org.jetbrains.intellij.tasks.InstrumentCodeTask
+import kotlin.io.path.isDirectory
+import kotlin.io.path.name
 
 plugins {
     id("apollo.library") apply false
@@ -165,19 +169,23 @@ tasks.register("rmbuild") {
 }
 allprojects {
     tasks.withType<InstrumentCodeTask>().configureEach {
-        val x = ideaDependency.get()
         doLast {
-            rootProject.buildScan.value("${this@configureEach.name} - getFqn", x.getFqn())
-            rootProject.buildScan.value("${this@configureEach.name} - buildNumber}", x.buildNumber)
-            rootProject.buildScan.value("${this@configureEach.name} - version", x.version)
-            rootProject.buildScan.value("${this@configureEach.name} - name}", x.name)
-            rootProject.buildScan.value("${this@configureEach.name} - hashcode}", "${x.hashCode()}")
-            rootProject.buildScan.value("${this@configureEach.name} - tostring}", "${x.toString()}")
-            x.extraDependencies.forEach {
-                rootProject.buildScan.value("${this@configureEach.name} - depende name }", "$it")
-                rootProject.buildScan.value("${this@configureEach.name} - depende name }", "${it.classes.path}")
+          val x = this@configureEach.ideaDependency.get().classes
+            if (x.isDirectory) {
+                val lib = x.toPath().resolve("lib")
+                if (lib.isDirectory()) {
+                    val baseFiles = (collectJars(lib) { file ->
+                        (this@configureEach.ideaDependency.get().withKotlin || !isKotlinRuntime(file.name.removeSuffix(".jar"))) && file.name != "junit.jar" && file.name != "annotations.jar"
+                    }).sorted()
+                    val antFiles = collectJars(lib.resolve("ant/lib")).sorted()
+                    val a = (baseFiles + antFiles).map { it.toFile() }
+                    println("results of that")
+                    a.forEach {
+                        println(it.name)
+                        println(it.path)
+                    }
+                }
             }
-            rootProject.buildScan.value("${this@configureEach.name} - tostring}", "${x.pluginsRegistry.toString()}")
 
 
             rootProject.buildScan.value("${this@configureEach.name} - lazy getFqn", this@configureEach.ideaDependency.get().getFqn())
@@ -193,12 +201,6 @@ allprojects {
 
         }
         doFirst {
-            rootProject.buildScan.value("${this@configureEach.name} -First getFqn", x.getFqn())
-            rootProject.buildScan.value("${this@configureEach.name} -First buildNumber}", x.buildNumber)
-            rootProject.buildScan.value("${this@configureEach.name} -First version", x.version)
-            rootProject.buildScan.value("${this@configureEach.name} -First name}", x.name)
-            rootProject.buildScan.value("${this@configureEach.name} -First hashcode}", "${x.hashCode()}")
-            rootProject.buildScan.value("${this@configureEach.name} -First tostring}", "${x.toString()}")
 
 
             rootProject.buildScan.value("${this@configureEach.name} -lazy First getFqn", this@configureEach.ideaDependency.get().getFqn())
