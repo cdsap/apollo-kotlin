@@ -163,27 +163,52 @@ tasks.register("rmbuild") {
         }.count()
     }
 }
-allprojects{
-tasks.withType<InstrumentCodeTask>().configureEach {
-    doLast {
-        rootProject.buildScan.value("${this@configureEach.name} - getFqn", this@configureEach.ideaDependency.get().getFqn())
-        rootProject.buildScan.value("${this@configureEach.name} - buildNumber}", this@configureEach.ideaDependency.get().buildNumber)
-        rootProject.buildScan.value("${this@configureEach.name} - version", this@configureEach.ideaDependency.get().version)
-        rootProject.buildScan.value("${this@configureEach.name} - name}", this@configureEach.ideaDependency.get().name)
-        rootProject.buildScan.value("${this@configureEach.name} - hashcode}", "${this@configureEach.ideaDependency.get().hashCode()}")
-        rootProject.buildScan.value("${this@configureEach.name} - tostring}", "${this@configureEach.ideaDependency.get().toString()}")
+allprojects {
+    tasks.withType<InstrumentCodeTask>().configureEach {
+        val x = ideaDependency.get()
+        doLast {
+            rootProject.buildScan.value("${this@configureEach.name} - getFqn", x.getFqn())
+            rootProject.buildScan.value("${this@configureEach.name} - buildNumber}", x.buildNumber)
+            rootProject.buildScan.value("${this@configureEach.name} - version", x.version)
+            rootProject.buildScan.value("${this@configureEach.name} - name}", x.name)
+            rootProject.buildScan.value("${this@configureEach.name} - hashcode}", "${x.hashCode()}")
+            rootProject.buildScan.value("${this@configureEach.name} - tostring}", "${x.toString()}")
+            x.extraDependencies.forEach {
+                rootProject.buildScan.value("${this@configureEach.name} - depende name }", "$it")
+                rootProject.buildScan.value("${this@configureEach.name} - depende name }", "${it.classes.path}")
+            }
+            rootProject.buildScan.value("${this@configureEach.name} - tostring}", "${x.pluginsRegistry.toString()}")
 
 
+            rootProject.buildScan.value("${this@configureEach.name} - lazy getFqn", this@configureEach.ideaDependency.get().getFqn())
+            rootProject.buildScan.value("${this@configureEach.name} - lazy buildNumber}", this@configureEach.ideaDependency.get().buildNumber)
+            rootProject.buildScan.value("${this@configureEach.name} - lazy version", this@configureEach.ideaDependency.get().version)
+            rootProject.buildScan.value("${this@configureEach.name} - lazy name}", this@configureEach.ideaDependency.get().name)
+            rootProject.buildScan.value("${this@configureEach.name} - lazy hashcode}", "${this@configureEach.ideaDependency.get().hashCode()}")
+            rootProject.buildScan.value("${this@configureEach.name} - lazy tostring}", "${this@configureEach.ideaDependency.get().toString()}")
+            this@configureEach.ideaDependency.get().extraDependencies.forEach {
+                rootProject.buildScan.value("${it.name} - depende name }", "${it.name}")
+                rootProject.buildScan.value("${it.name} - depende path }", "${it.classes.path}")
+            }
+
+        }
+        doFirst {
+            rootProject.buildScan.value("${this@configureEach.name} -First getFqn", x.getFqn())
+            rootProject.buildScan.value("${this@configureEach.name} -First buildNumber}", x.buildNumber)
+            rootProject.buildScan.value("${this@configureEach.name} -First version", x.version)
+            rootProject.buildScan.value("${this@configureEach.name} -First name}", x.name)
+            rootProject.buildScan.value("${this@configureEach.name} -First hashcode}", "${x.hashCode()}")
+            rootProject.buildScan.value("${this@configureEach.name} -First tostring}", "${x.toString()}")
+
+
+            rootProject.buildScan.value("${this@configureEach.name} -lazy First getFqn", this@configureEach.ideaDependency.get().getFqn())
+            rootProject.buildScan.value("${this@configureEach.name} -lazy First buildNumber}", this@configureEach.ideaDependency.get().buildNumber)
+            rootProject.buildScan.value("${this@configureEach.name} -lazy First version", this@configureEach.ideaDependency.get().version)
+            rootProject.buildScan.value("${this@configureEach.name} -lazy First name}", this@configureEach.ideaDependency.get().name)
+            rootProject.buildScan.value("${this@configureEach.name} -lazy First hashcode}", "${this@configureEach.ideaDependency.get().hashCode()}")
+            rootProject.buildScan.value("${this@configureEach.name} -lazy First tostring}", "${this@configureEach.ideaDependency.get().toString()}")
+
+
+        }
     }
-    doFirst {
-        rootProject.buildScan.value("${this@configureEach.name} -First getFqn", this@configureEach.ideaDependency.get().getFqn())
-        rootProject.buildScan.value("${this@configureEach.name} -First buildNumber}", this@configureEach.ideaDependency.get().buildNumber)
-        rootProject.buildScan.value("${this@configureEach.name} -First version", this@configureEach.ideaDependency.get().version)
-        rootProject.buildScan.value("${this@configureEach.name} -First name}", this@configureEach.ideaDependency.get().name)
-        rootProject.buildScan.value("${this@configureEach.name} -First hashcode}", "${this@configureEach.ideaDependency.get().hashCode()}")
-        rootProject.buildScan.value("${this@configureEach.name} -First tostring}", "${this@configureEach.ideaDependency.get().toString()}")
-
-
-    }
-}
 }
