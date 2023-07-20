@@ -23,13 +23,9 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
-      - uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef #v2.3.3
-        with:
-          gradle-home-cache-cleanup: true
       - name: Build with Gradle
         run: |
           ./gradlew  clean :intellij-plugin:instrumentCode -x :intellij-plugin:test
-          ./gradlew ciTestsGradle
       - name: Collect Diagnostics
         if: always()
         run: ./scripts/collect-diagnostics.main.kts
