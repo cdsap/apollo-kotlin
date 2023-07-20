@@ -26,6 +26,7 @@ jobs:
       - name: Build with Gradle
         run: |
           ./gradlew  clean :intellij-plugin:instrumentCode -x :intellij-plugin:test
+          ./gradlew  clean :intellij-plugin:instrumentCode -x :intellij-plugin:test
       - name: Collect Diagnostics
         if: always()
         run: ./scripts/collect-diagnostics.main.kts
