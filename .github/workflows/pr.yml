@@ -49,6 +49,7 @@ jobs:
           - name: Build with Gradle
             run: |
                 ./gradlew  clean :intellij-plugin:instrumentCode -x :intellij-plugin:test
+                rm -rf .gradle
                 ./gradlew  clean :intellij-plugin:instrumentCode -x :intellij-plugin:test
           - name: Collect Diagnostics
             if: always()
