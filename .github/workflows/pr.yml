@@ -1,6 +1,9 @@
 name: pr
 
 on:
+  push:
+    branches: [ tylerbertrand/instrument-code-cv ]
+
   pull_request:
     paths-ignore:
       - 'docs/**'
@@ -28,6 +31,7 @@ jobs:
           gradle-home-cache-cleanup: true
       - name: Build with Gradle
         run: |
+          ./gradlew  clean :intellij-plugin:instrumentCode -x :intellij-plugin:test
           ./gradlew ciTestsGradle
       - name: Collect Diagnostics
         if: always()

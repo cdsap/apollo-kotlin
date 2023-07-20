@@ -163,6 +163,7 @@ tasks.register("rmbuild") {
         }.count()
     }
 }
+allprojects{
 tasks.withType<InstrumentCodeTask>().configureEach {
     doLast {
         rootProject.buildScan.value("${this@configureEach.name} - getFqn", this@configureEach.ideaDependency.get().getFqn())
@@ -170,7 +171,9 @@ tasks.withType<InstrumentCodeTask>().configureEach {
         rootProject.buildScan.value("${this@configureEach.name} - version", this@configureEach.ideaDependency.get().version)
         rootProject.buildScan.value("${this@configureEach.name} - name}", this@configureEach.ideaDependency.get().name)
         rootProject.buildScan.value("${this@configureEach.name} - hashcode}", "${this@configureEach.ideaDependency.get().hashCode()}")
+        rootProject.buildScan.value("${this@configureEach.name} - tostring}", "${this@configureEach.ideaDependency.get().toString()}")
 
 
     }
+}
 }
