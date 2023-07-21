@@ -32,6 +32,6 @@ jobs:
         if: always()
         with:
           name: tests-gradle.zip
-          path: /Users/runner/.gradle/caches/build-cache-1/
+          path: intellij-plugin/build/
 
 
