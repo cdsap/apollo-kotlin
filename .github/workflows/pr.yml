@@ -25,8 +25,7 @@ jobs:
           java-version: 17
       - name: Build with Gradle
         run: |
-          ./gradlew  clean :intellij-plugin:instrumentCode -x :intellij-plugin:test --info
-          ./gradlew  clean :intellij-plugin:instrumentCode -x :intellij-plugin:test --info
+          ./gradlew  clean :intellij-plugin:instrumentCode -x :intellij-plugin:test
           ./gradlew  clean :intellij-plugin:instrumentCode -x :intellij-plugin:test
       - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce #v3.1.2
         if: always()
@@ -35,3 +34,20 @@ jobs:
           path: intellij-plugin/build/
 
 
+  tests-gradle2:
+      if: "!startsWith(github.head_ref, 'release-')"
+      runs-on: macos-latest
+      steps:
+          - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c #v3.3.0
+          - uses: actions/setup-java@1df8dbefe2a8cbc99770194893dd902763bee34b #v3.9.0
+            with:
+                distribution: 'zulu'
+                java-version: 17
+          - name: Build with Gradle
+            run: |
+                ./gradlew  clean :intellij-plugin:instrumentCode -x :intellij-plugin:test
+          - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce #v3.1.2
+            if: always()
+            with:
+                name: tests-gradle2.zip
+                path: intellij-plugin/build/
