@@ -28,6 +28,8 @@ jobs:
           ./gradlew  clean :intellij-plugin:instrumentCode -x :intellij-plugin:test
             rm -rf .gradle
             rm -rf .idea
+            rm -rf /Users/runner/.gradle/caches/jars-9
+            rm -rf /Users/runner/.gradle/caches/modules-2
             rm -rf build-logic/.gradle
           ./gradlew  clean :intellij-plugin:instrumentCode -x :intellij-plugin:test
       - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce #v3.1.2

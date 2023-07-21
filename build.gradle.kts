@@ -203,7 +203,7 @@ allprojects {
                 val allFiles = mutableSetOf<String>()
                 classLoader.urLs.forEach {
                     println(it.toFile().path + "-- " + "${fingerprinting.fingerprint(files(it.toFile())).hash}")
-                    rootProject.buildScan.value("${this@configureEach.name} do last -${it.toFile().path}", "${fingerprinting.fingerprint(files(it.toFile())).hash}")
+                    rootProject.buildScan.value("${it.toFile().name}", "${it.toFile().name} - ${fingerprinting.fingerprint(files(it.toFile())).hash}")
 
                 }
                 classLoader = classLoader.parent
