@@ -25,8 +25,8 @@ jobs:
           java-version: 17
       - name: Build with Gradle
         run: |
-          ./gradlew  clean :intellij-plugin:instrumentCode -x :intellij-plugin:test
-          ./gradlew  clean :intellij-plugin:instrumentCode -x :intellij-plugin:test
+          ./gradlew  clean :intellij-plugin:instrumentCode -x :intellij-plugin:test --info
+          ./gradlew  clean :intellij-plugin:instrumentCode -x :intellij-plugin:test --info
           ./gradlew  clean :intellij-plugin:instrumentCode -x :intellij-plugin:test
       - name: Collect Diagnostics
         if: always()
